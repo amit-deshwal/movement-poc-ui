@@ -1,17 +1,35 @@
 import { google } from "@ai-sdk/google";
 import { streamText } from "ai";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request) {
-  const { messages, model, temperature, frequencyPenalty, presencePenalty } =
-    await req.json();
+export async function POST(req: NextRequest) {
+  try {
+    const { messages, model, temperature, frequencyPenalty, presencePenalty } =
+      await req.json();
 
-  const result = streamText({
-    model: google("gemini-1.5-flash"),
-    messages,
-    temperature: temperature || 0.7,
-    frequencyPenalty: frequencyPenalty || 0,
-    presencePenalty: presencePenalty || 0,
-  });
+    const result = await streamText({
+      model: google("gemini-1.5-flash"),
+      messages,
+      temperature: temperature || 0.7,
+      frequencyPenalty: frequencyPenalty || 0,
+      presencePenalty: presencePenalty || 0,
+    });
 
-  return result.toDataStreamResponse();
+    return result.toDataStreamResponse();
+  } catch (error) {
+    console.error("Error in POST handler:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to process request" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
