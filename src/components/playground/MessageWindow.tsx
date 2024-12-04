@@ -14,6 +14,12 @@ interface MessageWindowProps {
   messages: Message[];
   isLoading: boolean;
 }
+interface CustomCodeProps {
+  node?: any;
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
 
 export function MessageWindow({ messages, isLoading }: MessageWindowProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -53,7 +59,13 @@ export function MessageWindow({ messages, isLoading }: MessageWindowProps) {
                 remarkPlugins={[remarkMath]}
                 rehypePlugins={[rehypeKatex]}
                 components={{
-                  code({ node, inline, className, children, ...props }) {
+                  code: ({
+                    node,
+                    inline,
+                    className,
+                    children,
+                    ...props
+                  }: CustomCodeProps) => {
                     const match = /language-(\w+)/.exec(className || "");
                     return !inline && match ? (
                       <CodeBlock

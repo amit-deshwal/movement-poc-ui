@@ -70,7 +70,7 @@ export default function Playground() {
     isLoading,
     setInput,
   } = useChat({
-    api: "/api/chat",
+    api: "/llm-chatbot/api/chat",
     body: {
       model,
       temperature,

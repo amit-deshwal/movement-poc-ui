@@ -50,13 +50,13 @@ export function CodeBlock({ language, value }: CodeBlockProps) {
         </SyntaxHighlighter>
       )}
       <div className="absolute top-2 right-2 space-x-2">
-        <Button size="sm" variant="ghost" onClick={handleCopy}>
+        <Button size="sm" variant="outline" onClick={handleCopy}>
           <Copy className="h-4 w-4" />
         </Button>
-        <Button size="sm" variant="ghost" onClick={handleDownload}>
+        <Button size="sm" variant="outline" onClick={handleDownload}>
           <Download className="h-4 w-4" />
         </Button>
-        <Button size="sm" variant="ghost" onClick={handleEdit}>
+        <Button size="sm" variant="outline" onClick={handleEdit}>
           <Edit className="h-4 w-4" />
         </Button>
       </div>
