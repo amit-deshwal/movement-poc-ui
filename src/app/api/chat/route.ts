@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("ssup");
     const { messages, model, temperature, frequencyPenalty, presencePenalty } =
       await req.json();
 
