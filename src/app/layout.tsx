@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import "@mosaicag/swap-widget/style.css";
 import "./globals.css";
 import LandingPage from "@/components/LandingPage";
+import Image from "next/image";
 
 export default function RootLayout({
   children,
@@ -48,7 +50,14 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 
         <Sidebar>
           <SidebarHeader>
-            <h2 className="text-lg font-semibold p-4">AI Trader</h2>
+            <h2 className="text-2xl font-semibold p-4 pb-0">Gfin 🤝🏼</h2>
+            <Image
+              src="/movement.png"
+              width={150}
+              height={150}
+              alt="Movement Labs"
+              className="inline ml-4"
+            />
           </SidebarHeader>
           <SidebarContent>
             <nav className="space-y-2 p-4">
@@ -66,7 +75,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                   pathname === "/chat" ? "bg-gray-200" : ""
                 }`}
               >
-                Chat
+                Goals & Tasks
               </Link>
             </nav>
           </SidebarContent>

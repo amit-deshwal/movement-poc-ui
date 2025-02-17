@@ -20,9 +20,9 @@ export function MessageWindow({ messages, isLoading }: MessageWindowProps) {
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
-      {messages.map((message) => (
+      {messages.map((message, index) => (
         <div
-          key={message.id}
+          key={index}
           className={`flex ${
             message.role === "user" ? "justify-end" : "justify-start"
           }`}
@@ -39,7 +39,7 @@ export function MessageWindow({ messages, isLoading }: MessageWindowProps) {
                 : "bg-white text-gray-800"
             }`}
           >
-            {message.content}
+            {message.role === "user" ? message.content : ""}
           </div>
         </div>
       ))}
@@ -57,10 +57,8 @@ export function MessageWindow({ messages, isLoading }: MessageWindowProps) {
 
 function TypingIndicator() {
   return (
-    <div className="flex space-x-1">
-      {[0, 1, 2].map((i) => (
-        <div key={i} className="w-2 h-2 bg-gray-500 rounded-full" />
-      ))}
+    <div className="flex items-center space-x-2">
+      <div className="animate-pulse text-gray-900">Analyzing...</div>
     </div>
   );
 }

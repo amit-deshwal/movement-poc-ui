@@ -2,16 +2,27 @@ import { FC } from "react";
 import { ConnectButton } from "@razorlabs/razorkit";
 import { motion } from "framer-motion";
 
+import Image from "next/image";
+
 const LandingPage: FC = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 text-white bg-black">
+    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-white bg-black">
+      {/* Image positioned at the top-left */}
+      <div className="absolute top-0 left-0 p-4 z-10 m-8">
+        <Image src="/move.png" width={120} height={120} alt="Movement Labs" />
+      </div>
+
+      <div className="absolute bottom-0 right-0 p-4 z-10 m-8">
+        <Image src="/point.png" width={160} height={160} alt="Movement Labs" />
+      </div>
+
       <motion.h1
         className="text-5xl font-bold mb-6 text-center"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Welcome to NextGen AI Web3
+        Gfin
       </motion.h1>
       <motion.p
         className="text-xl mb-8 text-center max-w-2xl text-gray-300"
@@ -19,8 +30,7 @@ const LandingPage: FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        Experience the future of decentralized applications powered by
-        artificial intelligence.
+        Your personal Financial agent for Movement ecosystem
       </motion.p>
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -46,18 +56,18 @@ const LandingPage: FC = () => {
       >
         <FeatureCard
           title="AI-Powered"
-          description="Leverage cutting-edge AI algorithms for enhanced decision-making and user experiences."
+          description="Multiple AI agents collaborate for smarter, data-driven investment decisions tailored to your financial goals."
           icon="🧠"
         />
         <FeatureCard
-          title="Decentralized"
-          description="Enjoy the benefits of a truly decentralized application with full control over your data."
-          icon="🔗"
+          title="Secured"
+          description="Built with non custodial wallet, ensuring top-tier security for all transactions and data."
+          icon="🔒"
         />
         <FeatureCard
-          title="Secure"
-          description="Rest easy knowing your transactions and data are protected by advanced cryptography."
-          icon="🔒"
+          title="Ecosystem-Focused"
+          description="Specialized in the Movement blockchain, delivering hyper-relevant insights and strategies for maximum growth."
+          icon="🔗"
         />
       </motion.div>
     </div>

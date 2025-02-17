@@ -11,6 +11,8 @@
   "dependencies": {
     "@ai-sdk/google": "^1.0.4",
     "@ai-sdk/openai": "^1.0.6",
+    "@aptos-labs/ts-sdk": "^1.35.0",
+    "@mosaicag/swap-widget": "^0.0.13",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
@@ -23,6 +25,7 @@
     "@razorlabs/razorkit": "^1.0.9",
     "@wooorm/starry-night": "^3.5.0",
     "ai": "^4.0.11",
+    "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
