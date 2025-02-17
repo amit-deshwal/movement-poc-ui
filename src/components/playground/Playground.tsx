@@ -195,7 +195,7 @@ export default function Playground() {
                                 </Button>
                               </div>
                               <div className="grid gap-2 text-sm">
-                                <p className="text-gray-400 line-clamp-1">
+                                <p className="text-gray-400 line-clamp-2">
                                   {token.analysis}
                                 </p>
                                 <div className="flex justify-between items-center">

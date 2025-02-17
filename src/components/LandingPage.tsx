@@ -8,8 +8,8 @@ const LandingPage: FC = () => {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-white bg-black">
       {/* Image positioned at the top-left */}
-      <div className="absolute top-0 left-0 p-4 z-10 m-8">
-        <Image src="/move.png" width={120} height={120} alt="Movement Labs" />
+      <div className="absolute bottom-0 left-0 p-4 z-10 m-8">
+        <Image src="/move.png" width={140} height={140} alt="Movement Labs" />
       </div>
 
       <div className="absolute bottom-0 right-0 p-4 z-10 m-8">
@@ -17,7 +17,7 @@ const LandingPage: FC = () => {
       </div>
 
       <motion.h1
-        className="text-5xl font-bold mb-6 text-center"
+        className="text-8xl font-bold mb-6 text-center"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}

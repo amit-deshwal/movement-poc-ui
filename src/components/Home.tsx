@@ -182,6 +182,9 @@ export default function Home() {
                     maintainAspectRatio: true,
                   }}
                 />
+                <h2 className="text-lg font-semibold text-center text-gray-700 mt-4">
+                  Gfin will show the portfolio trend for last 7 days here
+                </h2>
               </div>
             ) : (
               <p>No trend data available.</p>
