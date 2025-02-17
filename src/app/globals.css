@@ -91,3 +91,7 @@ body {
 .nextjs-toast-errors-parent {
   display: none;
 }
+
+nextjs-portal {
+  display: none;
+}
