@@ -8,12 +8,24 @@ const LandingPage: FC = () => {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-4 text-white bg-black">
       {/* Image positioned at the top-left */}
-      <div className="absolute bottom-0 left-0 p-4 z-10 m-8">
-        <Image src="/move.png" width={140} height={140} alt="Movement Labs" />
+      <div className="absolute bottom-10 left-4 p-2 z-10 md:m-4 md:bottom-0">
+        <Image
+          src="/move.png"
+          width={140}
+          height={140}
+          alt="Movement Labs"
+          className="w-[90px] md:w-[140px] hidden md:block"
+        />
       </div>
 
-      <div className="absolute bottom-0 right-0 p-4 z-10 m-8">
-        <Image src="/point.png" width={160} height={160} alt="Movement Labs" />
+      <div className="absolute bottom-10 right-4 p-2 z-10 md:m-4 md:bottom-0">
+        <Image
+          src="/point.png"
+          width={160}
+          height={160}
+          alt="Movement Labs"
+          className="w-[100px] md:w-[160px] hidden md:block"
+        />
       </div>
 
       <motion.h1
