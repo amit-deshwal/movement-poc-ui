@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, ReactNode } from "react";
 import { Send, Camera, TrendingUp, Hand, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,16 @@ import {
 } from "@/components/ui/dialog";
 import SwapWidget from "@mosaicag/swap-widget";
 import axios from "axios";
+type Message = { role: "user" | "bot"; content: string };
+type TokenAnalysis = {
+  price: number;
+  overall: string;
+  analysis: any;
+  symbol: string;
+  sentiment: { sentiment: string; key_events?: { title: string }[] };
+  market: { current_price: number };
+  applications?: { name?: string; link?: string; description?: string }[];
+};
 
 const suggestionCards = [
   {
@@ -41,15 +51,19 @@ const suggestionCards = [
 
 export default function Playground() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedToken, setSelectedToken] = useState(null);
-  const [tokens, setTokens] = useState([]);
-  const [apps, setApps] = useState([]);
+  const [selectedToken, setSelectedToken] = useState<TokenAnalysis | null>(
+    null
+  );
+  const [tokens, setTokens] = useState<TokenAnalysis[]>([]);
+  const [apps, setApps] = useState<
+    { name: string; link: string; desc: string }[]
+  >([]);
 
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wallet = useWallet();
 
   useEffect(() => {
@@ -58,7 +72,7 @@ export default function Playground() {
     }
   }, [messages]);
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
@@ -72,7 +86,10 @@ export default function Playground() {
         user_goal: input,
       });
 
-      const { analysis, recommendations } = response.data;
+      const { analysis, recommendations } = response.data as {
+        analysis: TokenAnalysis[];
+        recommendations: string;
+      };
 
       const tokens = analysis.map((item) => {
         const eventTitle =
@@ -87,11 +104,15 @@ export default function Playground() {
           price: item.market.current_price,
         };
       });
-      const lastThreeTokens = tokens.slice(0, 3);
+      setTokens(
+        analysis.slice(0, 3).map((item) => ({
+          ...item,
+          analysis: item.sentiment.key_events?.[0]?.title || "",
+        }))
+      );
 
-      setTokens(lastThreeTokens);
+      const applications = analysis[0]?.applications || [];
 
-      const applications = Object.values(analysis[0].applications || {}).flat();
       const appNames = applications.slice(0, 3).map((app) => {
         return {
           name: app?.name || "",
@@ -120,7 +141,7 @@ export default function Playground() {
     setIsLoading(false);
   };
 
-  const openModal = (token) => {
+  const openModal = (token: TokenAnalysis) => {
     setSelectedToken(token);
     setIsModalOpen(true);
   };
@@ -296,7 +317,18 @@ export default function Playground() {
             <DialogTitle>Swap {selectedToken?.symbol}</DialogTitle>
           </DialogHeader>
           <div className="Mosaic">
-            <SwapWidget wallet={wallet} apiKey="..." />
+            <SwapWidget
+              wallet={{
+                ...wallet,
+                account: wallet.account
+                  ? {
+                      ...wallet.account,
+                      publicKey: new Uint8Array(wallet.account.publicKey), // Convert to Uint8Array
+                    }
+                  : undefined,
+              }}
+              apiKey="..."
+            />
           </div>
           <DialogClose asChild>
             <Button className="mt-4 w-full">Close</Button>

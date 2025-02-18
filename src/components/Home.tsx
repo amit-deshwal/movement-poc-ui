@@ -31,45 +31,58 @@ ChartJS.register(
   LineElement
 );
 
-const fetchTokenData = async () => {
-  try {
-    const response = await fetch(
-      "https://aptos.testnet.porto.movementlabs.xyz/v1/accounts/0x321eb620be9256c91989117a515eb4d1d08869aec0cc7002e39223cd17ef723b/resources"
-    );
-
-    const data = await response.json();
-    console.log(data);
-    // Filter only "0x1::coin::CoinStore" types & exclude AptosCoin
-    const filteredData = data.filter(
-      (entry) =>
-        entry.type.startsWith("0x1::coin::CoinStore") &&
-        !entry.type.includes("AptosCoin")
-    );
-
-    // Extract token name, address & balance data
-    return filteredData
-      .map((entry) => {
-        const match = entry.type.match(/CoinStore<([^:]+::tokens::)(\w+)>/);
-        if (match) {
-          return {
-            tokenName: match[2],
-            balance: (Number(entry.data?.coin?.value) || 0) / 1e8 || 0,
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return [];
-  }
-};
+interface CoinStoreEntry {
+  type: string;
+  data?: {
+    coin?: {
+      value?: string;
+    };
+  };
+}
 
 export default function Home() {
   const wallet = useWallet();
   const { error, loading, balance } = useAccountBalance();
-  const [tokenData, setTokenData] = useState([]);
-  const [trendData, setTrendData] = useState([]);
+  const [tokenData, setTokenData] = useState<
+    { tokenName: string; balance: number }[]
+  >([]);
+  const [trendData, setTrendData] = useState<{ day: string; value: number }[]>(
+    []
+  );
+
+  const fetchTokenData = async () => {
+    try {
+      const response = await fetch(
+        "https://aptos.testnet.porto.movementlabs.xyz/v1/accounts/0x321eb620be9256c91989117a515eb4d1d08869aec0cc7002e39223cd17ef723b/resources"
+      );
+
+      const data = await response.json();
+      console.log(data);
+      // Filter only "0x1::coin::CoinStore" types & exclude AptosCoin
+      const filteredData = data.filter(
+        (entry: CoinStoreEntry) =>
+          entry.type.startsWith("0x1::coin::CoinStore") &&
+          !entry.type.includes("AptosCoin")
+      );
+
+      // Extract token name, address & balance data
+      return filteredData
+        .map((entry: CoinStoreEntry) => {
+          const match = entry.type.match(/CoinStore<([^:]+::tokens::)(\w+)>/);
+          if (match) {
+            return {
+              tokenName: match[2],
+              balance: (Number(entry.data?.coin?.value) || 0) / 1e8 || 0,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  };
 
   useEffect(() => {
     const fetchInfo = async () => {
@@ -77,7 +90,10 @@ export default function Home() {
       // Add "MOVE" token data (if available)
       const chartData = { tokenName: "MOVE", balance: Number(balance) / 1e8 }; // Convert balance
 
-      const combinedData = [...fetchedTokenData, chartData];
+      const combinedData: { tokenName: string; balance: number }[] = [
+        ...fetchedTokenData,
+        chartData,
+      ];
       setTokenData(combinedData);
 
       // Mock trend data for the last 7 days
@@ -195,10 +211,3 @@ export default function Home() {
     </div>
   );
 }
-
-// 3token + 3 applications diff list
-// with details
-//percent for ech list items
-//11
-//22
-//33
