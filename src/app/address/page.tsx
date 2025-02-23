@@ -176,7 +176,7 @@ export default function AddressPage() {
 
   return (
     <div className="p-4 space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {/* Pie Chart Card */}
         <Card>
           <CardHeader>
@@ -186,7 +186,7 @@ export default function AddressPage() {
             {loading ? (
               <p>Loading token data...</p>
             ) : tokenData.length > 0 ? (
-              <div className="w-full h-[400px]">
+              <div className="w-full h-[320px] md:h-[400px]">
                 {" "}
                 {/* Full width, fixed height */}
                 <Pie data={pieChartData} />
@@ -206,7 +206,7 @@ export default function AddressPage() {
             {loading ? (
               <p>Loading trend data...</p>
             ) : trendData.length > 0 ? (
-              <div className="w-full h-[400px]">
+              <div className="w-full h-[240px] h-[400px]">
                 {" "}
                 {/* Full width, fixed height */}
                 <Line
