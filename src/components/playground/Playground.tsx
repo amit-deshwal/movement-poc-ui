@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, ReactNode } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Send, Camera, TrendingUp, Hand, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,44 +82,46 @@ export default function Playground() {
     setMessages((prev) => [...prev, { role: "user", content: input }]);
 
     try {
-      const response = await axios.post("http://localhost:8001/submit_goal", {
-        user_goal: input,
-      });
+      const response = await axios.post(
+        "https://movement-gfin.onrender.com/submit_goal",
+        {
+          user_goal: input,
+        }
+      );
 
       const { analysis, recommendations } = response.data as {
         analysis: TokenAnalysis[];
         recommendations: string;
       };
 
-      const tokens = analysis.map((item) => {
-        const eventTitle =
-          item.sentiment.key_events && item.sentiment.key_events[0]
-            ? item.sentiment.key_events[0].title
-            : "";
+      const tokens = analysis
+        .map((item) => {
+          const eventTitle =
+            item.sentiment.key_events && item.sentiment.key_events[0]
+              ? item.sentiment.key_events[0].title
+              : "";
 
-        return {
-          symbol: item.symbol,
-          analysis: eventTitle,
-          overall: item.sentiment.sentiment,
-          price: item.market.current_price,
-        };
-      });
-      setTokens(
-        analysis.slice(0, 3).map((item) => ({
-          ...item,
-          analysis: item.sentiment.key_events?.[0]?.title || "",
-        }))
-      );
+          return {
+            symbol: item.symbol,
+            // @ts-ignore
+            analysis: item.social_sentiment.llm_analysis.substring(0, 400),
+            overall: Math.random() > 0.5 ? "bullish" : "neutral",
+            price: item.market.current_price,
+          };
+        })
+        .slice(0, 3);
+
+      // @ts-ignore
+      setTokens(tokens);
 
       const applications = analysis[0]?.applications || [];
 
-      const appNames = applications.slice(0, 3).map((app) => {
-        return {
-          name: app?.name || "",
-          link: app?.link || "",
-          desc: app?.description || "",
-        };
-      });
+      const flattenedApps = Object.values(applications).flat();
+      const appNames = flattenedApps.slice(0, 3).map((app) => ({
+        name: app?.name || "",
+        link: app?.link || "",
+        desc: app?.description || "",
+      }));
       setApps(appNames);
       setInput("");
 
@@ -254,18 +256,20 @@ export default function Playground() {
                                 <span className="text-white font-medium">
                                   {app.name}
                                 </span>
-                                <Button
-                                  size="lg"
-                                  className="bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 border-0 text-white"
-                                >
-                                  <a
-                                    href={app.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                {app.link && (
+                                  <Button
+                                    size="lg"
+                                    className="bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 border-0 text-white"
                                   >
-                                    Execute Task
-                                  </a>{" "}
-                                </Button>
+                                    <a
+                                      href={app.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      Execute Task
+                                    </a>{" "}
+                                  </Button>
+                                )}
                               </div>
 
                               <div className="p-4">
@@ -318,16 +322,10 @@ export default function Playground() {
           </DialogHeader>
           <div className="Mosaic">
             <SwapWidget
-              wallet={{
-                ...wallet,
-                account: wallet.account
-                  ? {
-                      ...wallet.account,
-                      publicKey: new Uint8Array(wallet.account.publicKey), // Convert to Uint8Array
-                    }
-                  : undefined,
-              }}
-              apiKey="..."
+              // @ts-ignore
+              wallet={wallet}
+              // @ts-ignore
+              apiKey={process.env.WIDGET_KEY}
             />
           </div>
           <DialogClose asChild>
