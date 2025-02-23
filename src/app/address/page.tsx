@@ -186,7 +186,7 @@ export default function AddressPage() {
             {loading ? (
               <p>Loading token data...</p>
             ) : tokenData.length > 0 ? (
-              <div className="w-full h-[320px] md:h-[400px]">
+              <div className="w-full h-[310px] md:h-[400px]">
                 {" "}
                 {/* Full width, fixed height */}
                 <Pie data={pieChartData} />
@@ -206,7 +206,7 @@ export default function AddressPage() {
             {loading ? (
               <p>Loading trend data...</p>
             ) : trendData.length > 0 ? (
-              <div className="w-full h-[240px] h-[400px]">
+              <div className="w-full h-[240px] md:h-[400px]">
                 {" "}
                 {/* Full width, fixed height */}
                 <Line
